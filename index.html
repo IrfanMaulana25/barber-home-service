@@ -436,23 +436,38 @@ section{
 
     <!-- HASIL BOOKING -->
     <div class="card">
-        <table>
-            <tr>
-                <th>Nama</th>
-                <th>Model</th>
-                <th>Jarak</th>
-                <th>Harga</th>
-            </tr>
-            {{range .}}
-            <tr>
-                <td>{{.NamaPelanggan}}</td>
-                <td>{{.ModelRambut}}</td>
-                <td>{{.JarakKm}} KM</td>
-                <td>Rp {{.Harga}}</td>
-            </tr>
-            {{end}}
-        </table>
-    </div>
+  <table>
+    <tr>
+      <th>Nama</th>
+      <th>Model</th>
+      <th>Jarak</th>
+      <th>Harga</th>
+    </tr>
+
+    <tr>
+      <td>Irfan</td>
+      <td>Undercut</td>
+      <td>5 KM</td>
+      <td>Rp 35.000</td>
+    </tr>
+
+    <tr>
+      <td>Rizky</td>
+      <td>Fade</td>
+      <td>3 KM</td>
+      <td>Rp 30.000</td>
+    </tr>
+
+    <tr>
+      <td>Fajar</td>
+      <td>Gundul</td>
+      <td>8 KM</td>
+      <td>Rp 45.000</td>
+    </tr>
+
+  </table>
+</div>
+
 
     <!-- FORM -->
     <div class="card booking-form">
@@ -489,5 +504,6 @@ section{
 
 </body>
 </html>
+
 
 
