@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -109,9 +110,12 @@ func ordersAPI(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
-		// GET /orders
 		if r.Method == http.MethodGet {
-			rows, _ := db.Query("SELECT * FROM orders")
+			rows, err := db.Query("SELECT * FROM orders")
+			if err != nil {
+				http.Error(w, err.Error(), 500)
+				return
+			}
 			defer rows.Close()
 
 			orders := []Order{}
@@ -145,7 +149,6 @@ func ordersAPI(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// POST /orders
 		if r.Method == http.MethodPost {
 			var input struct {
 				NamaPelanggan    string  `json:"nama_pelanggan"`
@@ -203,9 +206,19 @@ func main() {
 	http.HandleFunc("/", webHandler(db))
 	http.HandleFunc("/orders", ordersAPI(db))
 
-	// STATIC FILE SERVER (WAJIB UNTUK GAMBAR)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	// STATIC FILE SERVER
+	http.Handle("/static/",
+		http.StripPrefix("/static/",
+			http.FileServer(http.Dir("static")),
+		),
+	)
 
-	fmt.Println("Server jalan di http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// ====== PORT (WAJIB UNTUK FLY.IO) ======
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // local
+	}
+
+	fmt.Println("Server jalan di port", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
